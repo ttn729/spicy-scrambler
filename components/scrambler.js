@@ -43,7 +43,10 @@ export default function Scrambler() {
         words.forEach((word) => {
           newSentence += word + " / ";
         });
-
+        
+        if (punctuation == "") {
+          newSentence = newSentence.substring(0,newSentence.length - 2)
+        } 
         newSentence += punctuation;
 
         toOutput.push(newSentence);
