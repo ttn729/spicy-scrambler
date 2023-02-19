@@ -61,7 +61,7 @@ export default function Scrambler() {
       <Button onClick={submitSentences}>Scramble!</Button>
 
       {output.map((question, index) => {
-        return <Typography key={Index} align="left">{question}</Typography>;
+        return <Typography key={index} align="left">{question}</Typography>;
       })}
     </Box>
   );
