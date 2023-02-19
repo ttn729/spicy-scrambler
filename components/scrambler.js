@@ -1,4 +1,5 @@
 import { Button, TextField, Typography, Box } from "@mui/material";
+import zIndex from "@mui/material/styles/zIndex";
 import React from "react";
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -59,8 +60,8 @@ export default function Scrambler() {
       ></TextField>
       <Button onClick={submitSentences}>Scramble!</Button>
 
-      {output.map((question) => {
-        return <Typography align="left">{question}</Typography>;
+      {output.map((question, index) => {
+        return <Typography key={Index} align="left">{question}</Typography>;
       })}
     </Box>
   );
