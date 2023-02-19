@@ -24,9 +24,16 @@ export default function Scrambler() {
     let toOutput = [];
 
     splitSentences.forEach((sentence) => {
+      let punctuation = "";
+
       if (sentence != "") {
-        const punctuation = sentence.charAt(sentence.length - 1);
-        sentence = sentence.substring(0, sentence.length - 1);
+        if (
+          sentence.charAt(sentence.length - 1).toLowerCase() ==
+          sentence.charAt(sentence.length - 1).toUpperCase()
+        ) {
+          punctuation = sentence.charAt(sentence.length - 1);
+          sentence = sentence.substring(0, sentence.length - 1);
+        }
 
         let words = sentence.split(" ");
 
@@ -60,7 +67,11 @@ export default function Scrambler() {
       <Button onClick={submitSentences}>Scramble!</Button>
 
       {output.map((question, index) => {
-        return <Typography key={index} align="left">{question}</Typography>;
+        return (
+          <Typography key={index} align="left">
+            {question}
+          </Typography>
+        );
       })}
     </Box>
   );
