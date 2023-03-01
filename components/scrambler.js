@@ -1,5 +1,7 @@
-import { Button, TextField, Typography, Box } from "@mui/material";
 import React from "react";
+import { Button, TextField, Typography, Box } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import toast from "react-hot-toast";
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffleArray(array) {
@@ -36,17 +38,23 @@ export default function Scrambler() {
         }
 
         let words = sentence.split(" ");
+        const copy = [...words];
 
-        shuffleArray(words);
+        // Make sure that new sentence is always scrambled
+        if (copy.length > 1) {
+          while (JSON.stringify(words) == JSON.stringify(copy)) {
+            shuffleArray(words);
+          }
+        }
 
         let newSentence = "";
         words.forEach((word) => {
           newSentence += word + " / ";
         });
-        
+
         if (punctuation == "") {
-          newSentence = newSentence.substring(0,newSentence.length - 2)
-        } 
+          newSentence = newSentence.substring(0, newSentence.length - 2);
+        }
         newSentence += punctuation;
 
         toOutput.push(newSentence);
@@ -55,9 +63,16 @@ export default function Scrambler() {
     });
   };
 
+  const handleClickCopy = () => {
+    if (output != undefined && output.length != 0) {
+      navigator.clipboard.writeText(output.join("\n"));
+      toast.success("Text copied!");
+    }
+  };
+
   return (
     <Box flexDirection="vertical">
-      <Typography align="center" variant="h2">
+      <Typography align="center" variant="h2" color="green">
         Spicy Scrambler
       </Typography>
       <TextField
@@ -67,7 +82,15 @@ export default function Scrambler() {
         value={sentences}
         onChange={handleChange}
       ></TextField>
-      <Button onClick={submitSentences}>Scramble!</Button>
+
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Button onClick={submitSentences} sx={{ color: "green" }}>
+          Scramble!
+        </Button>
+        <Button onClick={handleClickCopy}>
+          <ContentCopyIcon sx={{ color: "green" }} />
+        </Button>
+      </Box>
 
       {output.map((question, index) => {
         return (
