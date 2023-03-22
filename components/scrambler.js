@@ -11,6 +11,22 @@ function shuffleArray(array) {
   }
 }
 
+function scrambleWord(word) {
+  if (word.length < 2) {
+    return word;
+  }
+  let chars = word.split("");
+  let scrambledWord = "";
+  do {
+    for (let i = chars.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [chars[i], chars[j]] = [chars[j], chars[i]];
+    }
+    scrambledWord = chars.join("");
+  } while (scrambledWord === word);
+  return scrambledWord;
+}
+
 export default function Scrambler() {
   const [sentences, setSentences] = React.useState("");
   const [output, setOutput] = React.useState([]);
@@ -19,7 +35,43 @@ export default function Scrambler() {
     setSentences(event.target.value);
   };
 
-  const submitSentences = () => {
+  const letterScramble = () => {
+    let splitSentences = sentences.split("\n");
+    let toOutput = [];
+
+    splitSentences.forEach((sentence) => {
+      let punctuation = "";
+
+      if (sentence != "") {
+        if (
+          sentence.charAt(sentence.length - 1).toLowerCase() ==
+          sentence.charAt(sentence.length - 1).toUpperCase()
+        ) {
+          punctuation = sentence.charAt(sentence.length - 1);
+          sentence = sentence.substring(0, sentence.length - 1);
+        }
+
+        let words = sentence.split(" ");
+        for (let i = 0; i < words.length; i++) {
+          words[i] = scrambleWord(words[i]);
+        }
+
+        let newSentence = "";
+        words.forEach((word) => {
+          newSentence += word + " ";
+        });
+
+        if (punctuation == "") {
+          newSentence = newSentence.substring(0, newSentence.length - 2);
+        }
+        newSentence += punctuation;
+        toOutput.push(newSentence);
+      }
+      setOutput(toOutput);
+    });
+  };
+
+  const wordScramble = () => {
     //console.log(sentences);
 
     let splitSentences = sentences.split("\n");
@@ -84,9 +136,14 @@ export default function Scrambler() {
       ></TextField>
 
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Button onClick={submitSentences} sx={{ color: "green" }}>
-          Scramble!
+        <Button onClick={wordScramble} sx={{ color: "green" }}>
+          World Scramble!
         </Button>
+
+        <Button onClick={letterScramble} sx={{ color: "green" }}>
+          Letter Scramble!
+        </Button>
+
         <Button onClick={handleClickCopy}>
           <ContentCopyIcon sx={{ color: "green" }} />
         </Button>
