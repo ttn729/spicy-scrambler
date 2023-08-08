@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextField, Typography, Box } from "@mui/material";
+import { Button, TextField, Typography, Box, Checkbox, MenuItem, InputLabel, Select, FormControl, FormGroup, FormControlLabel } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import toast from "react-hot-toast";
 
@@ -30,6 +30,9 @@ function scrambleWord(word) {
 export default function Scrambler() {
   const [sentences, setSentences] = React.useState("");
   const [output, setOutput] = React.useState([]);
+
+  const [outputType, setOutputType] = React.useState('None');
+
 
   const handleChange = (event) => {
     setSentences(event.target.value);
@@ -123,6 +126,8 @@ export default function Scrambler() {
   };
 
   return (
+
+
     <Box flexDirection="vertical">
       <Typography align="center" variant="h2" color="green">
         Spicy Scrambler
@@ -134,6 +139,21 @@ export default function Scrambler() {
         value={sentences}
         onChange={handleChange}
       ></TextField>
+
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="demo-simple-select-label">Output Type</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={outputType}
+          label="Age"
+          onChange={(e) => setOutputType(e.target.value)}
+        >
+          <MenuItem value={"None"}>None</MenuItem>
+          <MenuItem value={"Letters"}>Letters</MenuItem>
+          <MenuItem value={"Numbers"}>Numbers</MenuItem>
+        </Select>
+      </FormControl>
 
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Button onClick={wordScramble} sx={{ color: "green" }}>
@@ -149,13 +169,34 @@ export default function Scrambler() {
         </Button>
       </Box>
 
-      {output.map((question, index) => {
+      {(outputType == "None") && output.map((question, index) => {
         return (
           <Typography key={index} align="left">
             {question}
           </Typography>
         );
       })}
+
+
+      {(outputType == "Letters") && output.map((question, index) => {
+        // Calculate the corresponding letter using ASCII values
+        const letter = String.fromCharCode(97 + index);
+
+        return (
+          <Typography key={index} align="left">
+            {`${letter}) ${question}`}
+          </Typography>
+        );
+      })}
+
+      {(outputType == "Numbers") && output.map((question, index) => {
+        return (
+          <Typography key={index} align="left">
+            {`${index + 1}) ${question}`}
+          </Typography>   
+        );
+      })}
+
     </Box>
   );
 }
