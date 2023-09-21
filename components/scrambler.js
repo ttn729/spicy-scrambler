@@ -120,8 +120,24 @@ export default function Scrambler() {
 
   const handleClickCopy = () => {
     if (output != undefined && output.length != 0) {
-      navigator.clipboard.writeText(output.join("\n"));
-      toast.success("Text copied!");
+      if (outputType === "None") {
+        navigator.clipboard.writeText(output.join("\n"));
+        toast.success("Text copied!");
+      }
+      else if (outputType === "Numbers") {
+        const outputNumbers = output.map((question, index) => {
+          return `${index + 1}) ${question}`;
+        });
+        navigator.clipboard.writeText(outputNumbers.join("\n"));
+      }
+      else if (outputType === "Letters") {
+        const outputLetters = output.map((question, index) => {
+          const letter = String.fromCharCode(97 + index);
+          return `${letter}) ${question}`;
+        });
+        navigator.clipboard.writeText(outputLetters.join("\n"));
+      }
+    
     }
   };
 
@@ -193,7 +209,7 @@ export default function Scrambler() {
         return (
           <Typography key={index} align="left">
             {`${index + 1}) ${question}`}
-          </Typography>   
+          </Typography>
         );
       })}
 
